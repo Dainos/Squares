@@ -1,0 +1,80 @@
+#main {
+    width: max-content;
+    height: max-content;
+    margin: 50px;
+    position: absolute;
+}
+
+
+#table {
+    outline: solid 1px DodgerBlue;
+    width: max-content;
+    height: max-content;
+    display: block;
+    border-spacing: 4px 4px;    
+    position: relative;
+    top: -50px;
+}
+
+.row {
+    display: table-row;
+    width: max-content;
+    height: 80px;
+}
+
+.cell {
+    background-color:DodgerBlue;
+    width: 80px;
+    height: 80px;
+    display: table-cell;     
+}
+
+button {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+button:hover {
+    opacity: 0.6;
+}
+
+button:focus {
+    box-shadow: 0 0 2pt 1pt Blue;
+}
+
+.add-row-btn {
+    background-color: Orange;
+    position: relative;
+    top: -50px;
+    left: 84px;
+}
+
+.add-column-btn {
+    background-color: Orange;
+}
+
+.hide {
+    display: none;
+}
+
+.remove-row-btn {
+    background-color: Red;
+    position: relative;
+    transition-duration: 0.25s;
+}
+
+.remove-column-btn {
+    background-color: Red;  
+    position: relative;
+    transition-duration: 0.25s;    
+    bottom: 4px;
+    left: 84px;
+}
+
+
