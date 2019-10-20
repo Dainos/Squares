@@ -3,6 +3,8 @@
 let rowsAmount = 4,
     columnsAmount = 4;      // Дефолтные размеры
 
+let currentRow, currentColumn;
+
 
 let tableDiv = document.querySelector('#table');
 
@@ -17,19 +19,19 @@ hideRemoveBtns();
 addRowButton.addEventListener('click', addRow);
 addColumnButton.addEventListener('click', addColumn);
 removeRowButton.addEventListener('click', () => {
-    removeRow();
+    removeRow(currentRow);
     hideRemoveBtns();
 });
 removeColumnButton.addEventListener('click', () => {
-    removeColumn();
+    removeColumn(currentColumn);
     hideRemoveBtns();
 });
 
 
 
 tableDiv.addEventListener('mouseover', (e) => {
-    removeRowButton.classList.remove('hide');
-    removeColumnButton.classList.remove('hide');
+
+    showRemoveBtns();
     if (e.target.classList.value === 'cell') {
 
         // Отслеживание положения мыши и перемещение кнопок удаления
@@ -39,6 +41,20 @@ tableDiv.addEventListener('mouseover', (e) => {
             moving = target - btnPosition;
         if (target > btnPosition) removeColumnButton.style.left = `${btnPosition + moving -58}px`;
         else if (target < btnPosition) removeColumnButton.style.left = `${btnPosition + moving -58}px`;
+
+        let cells = document.querySelectorAll('.cell');
+
+
+        cells.forEach((cell, num) => {
+
+            // Определение текущего столбца/строки для удаления
+
+            if (cell === e.target) {
+                currentRow = Math.floor(num/rowsAmount);
+                currentColumn = num%columnsAmount;
+            }
+        });        
+
     }
 
     if (e.target.classList.value === 'cell') {
@@ -126,7 +142,10 @@ function hideRemoveBtns() {
 
 function showRemoveBtns() {
     removeRowButton.classList.remove('hide');
-    removeColumnButton.classList.remove('hide');
+    removeColumnButton.classList.remove('hide');    
+
+    if (rowsAmount == 1) removeRowButton.classList.add('hide');
+    if (columnsAmount == 1) removeColumnButton.classList.add('hide');
 }
 
 

@@ -38,6 +38,7 @@ button {
     border: none;
     cursor: pointer;
     display: inline-block;
+    transition-duration: 0.5s;
 }
 
 button:hover {
@@ -66,13 +67,11 @@ button:focus {
 .remove-row-btn {
     background-color: Red;
     position: relative;
-    transition-duration: 0.25s;
 }
 
 .remove-column-btn {
     background-color: Red;  
     position: relative;
-    transition-duration: 0.25s;    
     bottom: 4px;
     left: 84px;
 }
