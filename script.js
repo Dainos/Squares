@@ -1,166 +1,193 @@
 /* jshint esversion: 6 */
 
-let rowsAmount = 4,
-    columnsAmount = 4;      // Дефолтные размеры
-
-let currentRow, currentColumn;
 
 
-let tableDiv = document.querySelector('#table');
+class Element {
+    constructor(rowsAmount = 4, columnsAmount = 4) {
+        this.tableDiv = document.querySelector('.div-table');
+        this.rowsAmount = rowsAmount;
+        this.columnsAmount = columnsAmount;
+        this.addRowButton = document.querySelector('.add-row-btn');
+        this.addColumnButton = document.querySelector('.add-column-btn');
+        this.removeRowButton = document.querySelector('.remove-row-btn');
+        this.removeColumnButton = document.querySelector('.remove-column-btn');
 
-let addRowButton = document.querySelector('#add-row'),
-    addColumnButton = document.querySelector('#add-column'),
-    removeRowButton = document.querySelector('#remove-row'),
-    removeColumnButton = document.querySelector('#remove-column');
+        for (let i = 0; i < this.rowsAmount; i++) {
+            let row = document.createElement('div');
+            row.classList.add('row');
+            this.tableDiv.appendChild(row);
+            for (let j = 0; j < this.columnsAmount; j++) {
+                let cell = document.createElement('div');
+                cell.classList.add('cell');
+                row.appendChild(cell);
+            }
+        }
+        this.hideRemoveBtns();
 
-firstCreate();
-hideRemoveBtns();
+        this.addRowButton.addEventListener('mousedown', () => {
+            this.addRow();
+        });
+        this.addColumnButton.addEventListener('mousedown', () => {
+            this.addColumn();
+        });
+        this.removeRowButton.addEventListener('mousedown', () => {
+            this.removeRow(this.currentRow);
+            this.hideRemoveBtns();
+            this.moveRemoveBtns("up");
+        });
+        this.removeColumnButton.addEventListener('mousedown', () => {
+            this.removeColumn(this.currentColumn);
+            this.hideRemoveBtns();
+            this.moveRemoveBtns("left");
+        });
 
-addRowButton.addEventListener('click', addRow);
-addColumnButton.addEventListener('click', addColumn);
-removeRowButton.addEventListener('click', () => {
-    removeRow(currentRow);
-    hideRemoveBtns();
-});
-removeColumnButton.addEventListener('click', () => {
-    removeColumn(currentColumn);
-    hideRemoveBtns();
-});
+
+
+        this.tableDiv.addEventListener('mouseover', (e) => {
+
+            this.showRemoveBtns();
+
+            this.changeCurrentPosition(e);
+
+            this.moveRemoveBtns(e);
+
+
+        });
 
 
 
-tableDiv.addEventListener('mouseover', (e) => {
+        this.tableDiv.addEventListener('mouseout', () => {
+            this.timerOff = setTimeout(() => {
+                this.hideRemoveBtns();
+            }, 200);
+        });
 
-    showRemoveBtns();
-    if (e.target.classList.value === 'cell') {
+        document.querySelectorAll('button').forEach((b) => {
+            b.addEventListener('mouseover', () => {
+                this.showRemoveBtns();
+            });
+        });
 
-        // Отслеживание положения мыши и перемещение кнопок удаления
+        document.querySelectorAll('button').forEach((b) => {
+            b.addEventListener('mouseout', () => {
+                this.hideRemoveBtns();
+            });
+        });
+    }
 
-        let btnPosition = removeColumnButton.getBoundingClientRect().x,
-            target = e.target.getBoundingClientRect().x,
-            moving = target - btnPosition;
-        if (target > btnPosition) removeColumnButton.style.left = `${btnPosition + moving -58}px`;
-        else if (target < btnPosition) removeColumnButton.style.left = `${btnPosition + moving -58}px`;
 
+    moveRemoveBtns(event) {
+        if (event == "left") {
+            this.targetX = document.querySelectorAll(".cell")[this.columnsAmount - 1].getBoundingClientRect().x;
+            this.removeColumnButton.style.left = `${this.targetX - 65}px`;
+        } else if (event == "up") {
+            this.targetY = document.querySelectorAll(".row")[this.rowsAmount - 1].getBoundingClientRect().y;
+            this.removeRowButton.style.top = `${this.targetY - 65}px`;
+        } else if (event.target.classList.value === 'cell') {
+
+            // Перемещение кнопок удаления
+
+            this.btnPositionX = this.removeColumnButton.getBoundingClientRect().x;
+            this.targetX = event.target.getBoundingClientRect().x;
+            this.btnPositionY = this.removeRowButton.getBoundingClientRect().y;
+            this.targetY = event.target.getBoundingClientRect().y;
+
+            if (this.targetX != this.btnPositionX || this.targetY != this.btnPositionY) {
+                this.removeColumnButton.style.left = `${this.targetX - 65}px`;
+                this.removeRowButton.style.top = `${this.targetY - 65}px`;
+            }
+
+        }
+
+    }
+
+
+    addColumn() {
+
+        // Добавление столбца
+
+        let rows = document.querySelectorAll('.row');
+        rows.forEach((r) => {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            r.appendChild(cell);
+        });
+        this.columnsAmount++;
+    }
+
+
+    addRow() {
+
+        // Добавление строки
+
+        this.rowsAmount++;
+        let row = document.createElement('div');
+        row.classList.add('row');
+        for (let j = 0; j < this.columnsAmount; j++) {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            row.appendChild(cell);
+        }
+        this.tableDiv.appendChild(row);
+    }
+
+
+    removeRow(number = 0) {
+
+        // Удаление строки
+
+        let rows = document.querySelectorAll('.row');
+        this.tableDiv.removeChild(rows[number]);
+        this.rowsAmount--;
+    }
+
+
+    removeColumn(number = 0) {
+
+        // Удаление столбца
+
+        this.columnsAmount--;
+        let position = number;
+        let rows = document.querySelectorAll('.row');
+        rows.forEach((row) => {
+            let cells = document.querySelectorAll('.cell');
+            row.removeChild(cells[position]);
+            position += this.columnsAmount;
+        });
+    }
+
+
+    // Скрытие/отображение кнопок удаления
+
+    hideRemoveBtns() {
+        this.removeRowButton.classList.add('hide');
+        this.removeColumnButton.classList.add('hide');
+    }
+
+    showRemoveBtns() {
+        this.removeRowButton.classList.remove('hide');
+        this.removeColumnButton.classList.remove('hide');
+        clearTimeout(this.timerOff);
+        if (this.rowsAmount == 1) this.removeRowButton.classList.add('hide');
+        if (this.columnsAmount == 1) this.removeColumnButton.classList.add('hide');
+    }
+
+
+    changeCurrentPosition(event) {
         let cells = document.querySelectorAll('.cell');
-
 
         cells.forEach((cell, num) => {
 
             // Определение текущего столбца/строки для удаления
 
-            if (cell === e.target) {
-                currentRow = Math.floor(num/rowsAmount);
-                currentColumn = num%columnsAmount;
+            if (cell === event.target) {
+                this.currentRow = Math.floor(num / this.columnsAmount);
+                this.currentColumn = num % this.columnsAmount;
             }
-        });        
-
+        });
     }
 
-    if (e.target.classList.value === 'cell') {
-        let btnPosition = removeRowButton.getBoundingClientRect().y,
-            target = e.target.getBoundingClientRect().y,
-            moving = target - btnPosition;
-        if (target > btnPosition) removeRowButton.style.top = `${btnPosition + moving -138}px`;
-        else if (target < btnPosition) removeRowButton.style.top = `${btnPosition + moving - 138}px`;
-    }
-});
-
-tableDiv.addEventListener('mouseout', hideRemoveBtns);
-
-document.querySelectorAll('button').forEach((b) => {
-    b.addEventListener('mouseover', showRemoveBtns);
-});
-
-document.querySelectorAll('button').forEach((b) => {
-    b.addEventListener('mouseout', hideRemoveBtns);
-});
-
-
-
-function addColumn() {
-
-    // Добавление столбца
-
-    let rows = document.querySelectorAll('.row');
-    rows.forEach((r) => {
-        let cell = document.createElement('div');
-        cell.classList.add('cell');
-        r.appendChild(cell);
-    });
-    columnsAmount++;
 }
 
 
-function addRow() {
-
-    // Добавление строки
-
-    rowsAmount++;
-    let row = document.createElement('div');
-    row.classList.add('row');
-    for (let j = 0; j < columnsAmount; j++) {
-        let cell = document.createElement('div');
-        cell.classList.add('cell');
-        row.appendChild(cell);
-    }
-    tableDiv.appendChild(row);
-}
-
-
-function removeRow(number = 0) {
-
-    // Удаление строки
-
-    let rows = document.querySelectorAll('.row');
-    tableDiv.removeChild(rows[number]);
-    rowsAmount--;
-}
-
-
-function removeColumn(number = 0) {
-
-    // Удаление столбца
-
-    columnsAmount--;
-    let position = number;
-    let rows = document.querySelectorAll('.row');
-    rows.forEach((row) => {
-        let cells = document.querySelectorAll('.cell');
-        row.removeChild(cells[position]);
-        position += columnsAmount;
-    });
-}
-
-
-// Скрытие/отображение кнопок удаления
-
-function hideRemoveBtns() {
-    removeRowButton.classList.add('hide');
-    removeColumnButton.classList.add('hide');
-}
-
-function showRemoveBtns() {
-    removeRowButton.classList.remove('hide');
-    removeColumnButton.classList.remove('hide');    
-
-    if (rowsAmount == 1) removeRowButton.classList.add('hide');
-    if (columnsAmount == 1) removeColumnButton.classList.add('hide');
-}
-
-
-function firstCreate() {
-
-    // Инициализация основного элемента
-
-    for (let i = 0; i < rowsAmount; i++) {
-        let row = document.createElement('div');
-        row.classList.add('row');
-        tableDiv.appendChild(row);
-        for (let j = 0; j < columnsAmount; j++) {
-            let cell = document.createElement('div');
-            cell.classList.add('cell');
-            row.appendChild(cell);
-        }
-    }
-}
+const element = new Element();

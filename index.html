@@ -5,20 +5,20 @@
     <link rel="stylesheet" href="style.css">
     <title>Task 1</title>
 </head>
-<body>
-    <div id="main">
-        <div style="display: table-row; height: 80px; margin-bottom: 4px;">
-            <button id="remove-column" class="remove-column-btn">–</button>
-        </div>
-        <div style="display: table-row;">
-            <div style="display: table-cell;"><button id="remove-row" class="remove-row-btn">–</button>  </div>          
-            <div style="display: table-cell; "><div id="table"></div></div>
-            <div style="display: table-cell;"><button id="add-column" class="add-column-btn">+</button></div>
-        </div>
-        <div style="display: table-row;">
-            <button id="add-row" class="add-row-btn">+</button>
-        </div>
-    </div>
+<body>    
+    <table>
+        <tr class="tablerow">
+            <td></td>
+            <td><button class="btn remove-btn remove-column-btn">–</button></td>
+            <td></td>
+        </tr>
+        <tr class="tablerow">
+            <td class="tablecolumn"><button class="btn remove-btn remove-row-btn">–</button></td>
+            <td><div class="div-table"></div></td>
+            <td><button class="btn add-btn add-column-btn">+</button></td>
+        </tr>
+        <tr><td></td><td><button class="btn add-btn add-row-btn">+</button></td><td></td></tr>
+    </table>
     <script src="script.js"></script>
 </body>
 </html>

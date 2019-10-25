@@ -1,38 +1,39 @@
-#main {
-    width: max-content;
-    height: max-content;
-    margin: 50px;
-    position: absolute;
+
+
+.tablerow {
+    vertical-align: top;
+    height: 52px;
+}
+
+.tablecolumn {
+    width: 50px;
 }
 
 
-#table {
+.div-table {
     outline: solid 1px DodgerBlue;
     width: max-content;
     height: max-content;
-    display: block;
-    border-spacing: 4px 4px;    
     position: relative;
-    top: -50px;
 }
 
 .row {
     display: table-row;
     width: max-content;
-    height: 80px;
+    height: 0px;
 }
 
 .cell {
-    background-color:DodgerBlue;
-    width: 80px;
-    height: 80px;
+    background-color:#65A9E1;
+    width: 50px;
+    height: 50px;
     display: table-cell;     
 }
 
-button {
-    width: 80px;
-    height: 80px;
-    font-size: 30px;
+.btn {
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
     font-weight: bold;
     color: white;
     border: none;
@@ -41,39 +42,32 @@ button {
     transition-duration: 0.5s;
 }
 
-button:hover {
+.btn:hover {
     opacity: 0.6;
 }
 
-button:focus {
+.btn:focus {
     box-shadow: 0 0 2pt 1pt Blue;
 }
 
-.add-row-btn {
-    background-color: Orange;
-    position: relative;
-    top: -50px;
-    left: 84px;
+.add-btn {
+    background-color: #E6A83A;
+    position: relative; 
 }
 
-.add-column-btn {
-    background-color: Orange;
+.add-row-btn {       
+    left: 2px;
+}
+
+.add-column-btn {   
+    top: 2px;
 }
 
 .hide {
     display: none;
 }
 
-.remove-row-btn {
-    background-color: Red;
+.remove-btn {
+    background-color: #A12015;
     position: relative;
 }
-
-.remove-column-btn {
-    background-color: Red;  
-    position: relative;
-    bottom: 4px;
-    left: 84px;
-}
-
-
